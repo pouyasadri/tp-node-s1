@@ -56,7 +56,7 @@ http.createServer((req, res) => {
         req.on('end', () => {
             const {name, birth} = parse(body);
 
-            if (!name || name.length < 3 || !birth || isNaN(Date.parse(birth))) {
+            if (!name || name.trim().length < 3 || !birth || isNaN(Date.parse(birth))) {
                 res.writeHead(400, {'Content-Type': 'text/html'});
                 res.end('<h1>Invalid input. Please try again.</h1><a href="/">Go Back</a>');
                 return;
