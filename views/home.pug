@@ -1,0 +1,62 @@
+extends layout
+
+block content
+    .container.mt-5
+        .row.justify-content-center
+            .col-md-6
+                h1(class="text-center mb-4") #{title}
+                form(action="/add" method="POST" class="needs-validation border p-4 rounded shadow-sm bg-light" novalidate id="studentForm")
+                    .mb-3
+                        label(for="name" class="form-label") Name
+                        input(type="text" name="name" id="name" class="form-control" placeholder="Enter student name" required minlength="3" oninput="validateName()")
+                        small(class="text-danger d-none" id="nameError") Name must be at least 3 characters long.
+                    .mb-3
+                        label(for="birth" class="form-label") Date of Birth
+                        input(type="date" name="birth" id="birth" class="form-control" required onchange="validateBirth()")
+                        small(class="text-danger d-none" id="birthError") Please select a valid date of birth.
+                    button(type="submit" class="btn btn-primary w-100" id="submitButton") Add Student
+
+        script.
+            // Real-time validation script
+            function validateName() {
+                const nameInput = document.getElementById('name');
+                const nameError = document.getElementById('nameError');
+                const submitButton = document.getElementById('submitButton');
+                if (nameInput.value.trim().length < 3) {
+                    nameError.classList.remove('d-none');
+                    nameInput.classList.add('is-invalid');
+                    nameInput.classList.remove('is-valid');
+                    submitButton.disabled = true;
+                } else {
+                    nameError.classList.add('d-none');
+                    nameInput.classList.remove('is-invalid');
+                    nameInput.classList.add('is-valid');
+                    submitButton.disabled = false;
+                }
+            }
+
+            function validateBirth() {
+                const birthInput = document.getElementById('birth');
+                const birthError = document.getElementById('birthError');
+                const submitButton = document.getElementById('submitButton');
+                if (!birthInput.value) {
+                    birthError.classList.remove('d-none');
+                    birthInput.classList.add('is-invalid');
+                    birthInput.classList.remove('is-valid');
+                    submitButton.disabled = true;
+                } else {
+                    birthError.classList.add('d-none');
+                    birthInput.classList.remove('is-invalid');
+                    birthInput.classList.add('is-valid');
+                    submitButton.disabled = false;
+                }
+            }
+
+            document.getElementById('studentForm').addEventListener('submit', function (event) {
+                validateName();
+                validateBirth();
+                if (!this.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
